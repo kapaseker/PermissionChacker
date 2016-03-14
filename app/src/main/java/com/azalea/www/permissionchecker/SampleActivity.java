@@ -1,8 +1,11 @@
 package com.azalea.www.permissionchecker;
 
+import android.Manifest;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.cmccmap.permissionchecker.PermissionRequestor;
 import com.cmccmap.permissionchecker.TestUtil;
 
 public class SampleActivity extends AppCompatActivity {
@@ -12,7 +15,18 @@ public class SampleActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sample);
 
+		if (false == PermissionRequestor.reqeustPermissionInAct(SampleActivity.this, new String[]{
+				Manifest.permission.RECORD_AUDIO,
+				Manifest.permission.CAMERA,
+				Manifest.permission.WRITE_CONTACTS
+		}, 0x001)) {
+			Toast.makeText(SampleActivity.this,"All right",Toast.LENGTH_LONG).show();
+		}
 
-		TestUtil.toast(SampleActivity.this);
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 }
