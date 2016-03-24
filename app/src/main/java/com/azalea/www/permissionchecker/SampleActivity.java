@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.cmccmap.permissionchecker.PermissionRequestor;
-import com.cmccmap.permissionchecker.TestUtil;
 
 public class SampleActivity extends AppCompatActivity {
 

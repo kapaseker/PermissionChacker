@@ -43,6 +43,16 @@ public class PermissionChecker {
 		return extractPermissions(context,permissions,PackageManager.PERMISSION_DENIED);
 	}
 
+
+	/**
+	 * 检验一个权限组中是否有未被申请的权限
+	 * @param grantResult 需要查看权限结果
+	 * @return 有没有没被申请的权限
+	 * */
+	public static boolean hasDeniedPermissions(int[] grantResult){
+		return extractPermissions(grantResult,PackageManager.PERMISSION_DENIED);
+	}
+
 	/**
 	 * 检验一个权限组中已经被申请的权限
 	 * @param context
@@ -51,6 +61,15 @@ public class PermissionChecker {
 	 * */
 	public static String[] processGrantedPermissions(Context context, String[] permissions) {
 		return extractPermissions(context,permissions,PackageManager.PERMISSION_GRANTED);
+	}
+
+	/**
+	 * 检验一个权限组中是否有已经申请的权限
+	 * @param grantResult 需要查看权限结果
+	 * @return 有没有被申请的权限
+	 * */
+	public static boolean hasGrantedPermissions(int[] grantResult){
+		return extractPermissions(grantResult,PackageManager.PERMISSION_GRANTED);
 	}
 
 	/**
@@ -83,7 +102,7 @@ public class PermissionChecker {
 	 *
 	 * @return 返回满足要求的权限
 	 */
-	private static String[] extractPermissions(Context context, String[] permissions ,int flag) {
+	public static String[] extractPermissions(Context context, String[] permissions ,int flag) {
 
 		int[] permissionResult = checkSelfPermissions(context, permissions);
 		int length = permissionResult.length;
@@ -95,5 +114,22 @@ public class PermissionChecker {
 		}
 
 		return permissionList.toArray(new String[0]);
+	}
+
+	/**
+	 * 提取一组权限组中满足要求的权限
+	 * @param grantResult 需要查看结果的权限组
+	 * @param flag        权限的标识
+	 * @return 判断是否有满足标识的权限
+	 */
+	public static boolean extractPermissions(int[] grantResult, int flag) {
+
+		int length = grantResult.length;
+		for (int i = 0; i < length; ++i) {
+			if (grantResult[i] == flag) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
