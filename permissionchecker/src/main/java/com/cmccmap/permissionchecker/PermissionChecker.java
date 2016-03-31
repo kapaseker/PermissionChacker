@@ -25,11 +25,40 @@ public class PermissionChecker {
 	 * */
 	@TargetApi(Build.VERSION_CODES.M)
 	public static int[] checkSelfPermissions(Context context, String[] permissions) {
+
 		int length = permissions.length;
 		int[] permissionResult = new int[length];
-		for (int i = 0; i < length; ++i) {
-			permissionResult[i] = context.checkSelfPermission(permissions[i]);
+
+		if (!isSupportPermissionCheck()) {
+			for (int i = 0; i < length; ++i) {
+				permissionResult[i] = PackageManager.PERMISSION_GRANTED;
+			}
+		} else {
+			for (int i = 0; i < length; ++i) {
+				permissionResult[i] = context.checkSelfPermission(permissions[i]);
+			}
 		}
+
+		return permissionResult;
+	}
+
+	/**
+	 * 检验一个权限组的申请结果并返回
+	 * @param context
+	 * @param permissions 需要查看结果的权限组
+	 * @return 返回对应每个权限的结果
+	 * */
+	@TargetApi(Build.VERSION_CODES.M)
+	public static int checkSelfPermissions(Context context, String permissions) {
+
+		int permissionResult = 0;
+
+		if (!isSupportPermissionCheck()) {
+				permissionResult = PackageManager.PERMISSION_GRANTED;
+		} else {
+				permissionResult = context.checkSelfPermission(permissions);
+		}
+
 		return permissionResult;
 	}
 
@@ -131,5 +160,9 @@ public class PermissionChecker {
 			}
 		}
 		return false;
+	}
+
+	public static boolean isSupportPermissionCheck() {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
 	}
 }

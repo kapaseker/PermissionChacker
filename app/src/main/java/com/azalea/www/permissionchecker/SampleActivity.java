@@ -1,10 +1,12 @@
 package com.azalea.www.permissionchecker;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.cmccmap.permissionchecker.PermissionChecker;
 import com.cmccmap.permissionchecker.PermissionRequestor;
 
 public class SampleActivity extends AppCompatActivity {
@@ -19,8 +21,11 @@ public class SampleActivity extends AppCompatActivity {
 				Manifest.permission.CAMERA,
 				Manifest.permission.WRITE_CONTACTS
 		}, 0x001)) {
-			Toast.makeText(SampleActivity.this,"All right",Toast.LENGTH_LONG).show();
 		}
+
+		if(PackageManager.PERMISSION_GRANTED == PermissionChecker.checkSelfPermissions(SampleActivity.this,Manifest.permission.RECORD_AUDIO)){
+			Toast.makeText(SampleActivity.this,"RECORD_AUDIO right",Toast.LENGTH_LONG).show();
+		};
 
 	}
 

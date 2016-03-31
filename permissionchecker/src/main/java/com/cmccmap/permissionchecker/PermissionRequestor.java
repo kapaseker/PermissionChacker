@@ -21,6 +21,10 @@ public class PermissionRequestor {
 	@TargetApi(Build.VERSION_CODES.M)
 	public static boolean reqeustPermissionInAct(Activity activity, String[] permissions, int requestCode) {
 
+		if(!PermissionChecker.isSupportPermissionCheck()){
+			return false;
+		}
+
 		String[] permissionResult = PermissionChecker.processDeniedPermissions(activity, permissions);
 
 		if(permissionResult.length>0){
@@ -42,6 +46,10 @@ public class PermissionRequestor {
 	@TargetApi(Build.VERSION_CODES.M)
 	public static boolean reqeustPermissionInFrag(Fragment fragment, String[] permissions, int requestCode) {
 
+		if(!PermissionChecker.isSupportPermissionCheck()){
+			return false;
+		}
+
 		String[] permissionResult = PermissionChecker.processDeniedPermissions(fragment.getContext(), permissions);
 
 		if(permissionResult.length>0){
@@ -62,6 +70,10 @@ public class PermissionRequestor {
 	 * */
 	@TargetApi(Build.VERSION_CODES.M)
 	public static boolean reqeustPermissionInFrag(android.support.v4.app.Fragment fragment, String[] permissions, int requestCode) {
+
+		if(!PermissionChecker.isSupportPermissionCheck()){
+			return false;
+		}
 
 		String[] permissionResult = PermissionChecker.processDeniedPermissions(fragment.getContext(), permissions);
 
