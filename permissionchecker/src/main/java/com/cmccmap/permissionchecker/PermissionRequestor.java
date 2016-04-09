@@ -50,7 +50,7 @@ public class PermissionRequestor {
 			return false;
 		}
 
-		String[] permissionResult = PermissionChecker.processDeniedPermissions(fragment.getContext(), permissions);
+		String[] permissionResult = PermissionChecker.processDeniedPermissions(fragment.getActivity(), permissions);
 
 		if(permissionResult.length>0){
 			fragment.requestPermissions(permissionResult,requestCode);
@@ -75,7 +75,7 @@ public class PermissionRequestor {
 			return false;
 		}
 
-		String[] permissionResult = PermissionChecker.processDeniedPermissions(fragment.getContext(), permissions);
+		String[] permissionResult = PermissionChecker.processDeniedPermissions(fragment.getActivity(), permissions);
 
 		if(permissionResult.length>0){
 			fragment.requestPermissions(permissionResult,requestCode);
