@@ -49,7 +49,7 @@ public class PermissionChecker {
 	 * @return 返回对应每个权限的结果
 	 * */
 	@TargetApi(Build.VERSION_CODES.M)
-	public static int checkSelfPermissions(Context context, String permissions) {
+	public static int checkSelfPermission(Context context, String permissions) {
 
 		int permissionResult = 0;
 
@@ -78,7 +78,7 @@ public class PermissionChecker {
 	 * @param grantResult 需要查看权限结果
 	 * @return 有没有没被申请的权限
 	 * */
-	public static boolean hasDeniedPermissions(int[] grantResult){
+	public static boolean hasDeniedPermission(int[] grantResult){
 		return extractPermissions(grantResult,PackageManager.PERMISSION_DENIED);
 	}
 
@@ -97,7 +97,7 @@ public class PermissionChecker {
 	 * @param grantResult 需要查看权限结果
 	 * @return 有没有被申请的权限
 	 * */
-	public static boolean hasGrantedPermissions(int[] grantResult){
+	public static boolean hasGrantedPermission(int[] grantResult){
 		return extractPermissions(grantResult,PackageManager.PERMISSION_GRANTED);
 	}
 
@@ -107,18 +107,19 @@ public class PermissionChecker {
 	 * @param permissions 需要查看结果的权限组
 	 * @return true or false
 	 * */
-	public static boolean hasDeniedPermissions(Context context, String[] permissions) {
-		return extractPermissions(context, permissions, PackageManager.PERMISSION_DENIED).length != 0;
+	public static boolean hasDeniedPermission(Context context, String[] permissions) {
+		return hasSpecificPermissionResults(context, permissions, PackageManager.PERMISSION_DENIED);
 	}
 
 	/**
 	 * 检验一个权限组是否有已经申请的权限
+	 *
 	 * @param context
 	 * @param permissions 需要查看结果的权限组
 	 * @return true or false
-	 * */
-	public static boolean hasGrantedPermissions(Context context, String[] permissions) {
-		return extractPermissions(context, permissions, PackageManager.PERMISSION_GRANTED).length != 0;
+	 */
+	public static boolean hasGrantedPermission(Context context, String[] permissions) {
+		return hasSpecificPermissionResults(context, permissions, PackageManager.PERMISSION_GRANTED);
 	}
 
 
@@ -143,6 +144,33 @@ public class PermissionChecker {
 		}
 
 		return permissionList.toArray(new String[0]);
+	}
+
+	/**
+	 * 是否有某个特定的权限申请结果
+	 * @param context
+	 * @param permissions
+	 * @param flag
+	 * @return true means yes, false means no;
+	 * */
+	public static boolean hasSpecificPermissionResults(Context context, String[] permissions, int flag) {
+		if (isSupportPermissionCheck()) {
+			for (String item : permissions) {
+				if (flag == context.checkSelfPermission(item)) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			switch (flag) {
+				case PackageManager.PERMISSION_GRANTED:
+					return true;
+				case PackageManager.PERMISSION_DENIED:
+					return false;
+				default:
+					return true;
+			}
+		}
 	}
 
 	/**

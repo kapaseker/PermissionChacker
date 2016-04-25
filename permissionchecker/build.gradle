@@ -36,7 +36,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:support-v4:23.2.0"
+    compile "com.android.support:support-v4:23.2.1@aar"
 }
 
 
@@ -48,7 +48,7 @@ task makeJar(type: Copy) {
     from('build/intermediates/bundles/release/')
     into('build/outputs/')
     include('classes.jar')
-    rename ('classes.jar', 'permissioncheker-1.1.3.jar')
+    rename ('classes.jar', 'permissioncheker-1.1.4.jar')
 }
 
 makeJar.dependsOn(clearJar, build)
