@@ -1,9 +1,8 @@
 package com.cmccmap.permissionchecker;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,20 +22,13 @@ public class PermissionChecker {
 	 * @param permissions 需要查看结果的权限组
 	 * @return 返回对应每个权限的结果
 	 * */
-	@TargetApi(Build.VERSION_CODES.M)
 	public static int[] checkSelfPermissions(Context context, String[] permissions) {
 
 		int length = permissions.length;
 		int[] permissionResult = new int[length];
 
-		if (!isSupportPermissionCheck()) {
-			for (int i = 0; i < length; ++i) {
-				permissionResult[i] = PackageManager.PERMISSION_GRANTED;
-			}
-		} else {
-			for (int i = 0; i < length; ++i) {
-				permissionResult[i] = context.checkSelfPermission(permissions[i]);
-			}
+		for (int i = 0; i < length; ++i) {
+			permissionResult[i] = ContextCompat.checkSelfPermission(context, permissions[i]);
 		}
 
 		return permissionResult;
@@ -48,16 +40,11 @@ public class PermissionChecker {
 	 * @param permissions 需要查看结果的权限组
 	 * @return 返回对应每个权限的结果
 	 * */
-	@TargetApi(Build.VERSION_CODES.M)
 	public static int checkSelfPermission(Context context, String permissions) {
 
 		int permissionResult = 0;
 
-		if (!isSupportPermissionCheck()) {
-				permissionResult = PackageManager.PERMISSION_GRANTED;
-		} else {
-				permissionResult = context.checkSelfPermission(permissions);
-		}
+		permissionResult = ContextCompat.checkSelfPermission(context, permissions);
 
 		return permissionResult;
 	}
@@ -143,7 +130,7 @@ public class PermissionChecker {
 			}
 		}
 
-		return permissionList.toArray(new String[0]);
+		return permissionList.toArray(new String[permissionList.size()]);
 	}
 
 	/**
@@ -154,23 +141,12 @@ public class PermissionChecker {
 	 * @return true means yes, false means no;
 	 * */
 	public static boolean hasSpecificPermissionResults(Context context, String[] permissions, int flag) {
-		if (isSupportPermissionCheck()) {
-			for (String item : permissions) {
-				if (flag == context.checkSelfPermission(item)) {
-					return true;
-				}
-			}
-			return false;
-		} else {
-			switch (flag) {
-				case PackageManager.PERMISSION_GRANTED:
-					return true;
-				case PackageManager.PERMISSION_DENIED:
-					return false;
-				default:
-					return true;
+		for (String item : permissions) {
+			if (flag == ContextCompat.checkSelfPermission(context, item)) {
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -188,9 +164,5 @@ public class PermissionChecker {
 			}
 		}
 		return false;
-	}
-
-	public static boolean isSupportPermissionCheck() {
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
 	}
 }
